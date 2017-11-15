@@ -1,0 +1,69 @@
+#include<stdio.h>
+/*
+type,value,note 分别记录节点类型，节点数据值，节点说明
+sons数组记录子节点（考虑到语法数不一定是二叉树）
+son记录子节点数
+father指针指向父节点。做成双向方便添加节点和遍历
+level表示该节点处在第几层，打印时用于排版
+*/
+struct Node{
+	char *type;
+	char *value;
+	char *note;
+	Node *sons[10];
+	int son;
+	Node *father;
+	int level;
+};
+/*
+通过输入type，value，note三个参数初始化一个node节点。如果有参数没有值，则输入""。
+*/
+Node init(char *type, char *value, char *note){
+	Node *temp = new Node();
+	temp->type = type;
+	temp->value = value;
+	temp->note = note;
+	temp->son = 0;
+	return *temp;
+}
+/*
+将父节点和子节点连接
+*/
+void connet(Node *father, Node *son){
+	father->sons[father->son] = son;
+	father->son++;
+	son->father = father;
+	son->level = father->level + 1;
+}
+/*
+如果知道当前节点的level，可以用父节点下层的节点（子节点，孙子节点之类的）追溯父节点
+*/
+Node getfather(Node *temp,int level){
+	while (temp->level != level)
+		temp = temp->father;
+	return *temp->father;
+}
+/*
+打印当前节点，并根据其所处层数排版
+*/
+void printnode(Node *temp){
+	for (int i = 0; i < temp->level; i++){
+		printf("\t");
+	}
+	printf("%-20s\t%-20s\t%-20s\t\n", temp->type, temp->value, temp->note);
+}
+/*
+测试程序
+*/
+int main(){
+	printf("hello world!\n");
+	Node *temp1;
+	temp1=&init("test1", "testvalue1", "testnote1");
+	temp1->level = 1;
+	Node *temp2;
+	temp2 = &init("test2", "testvalue2", "testnote2");
+	connet(temp1, temp2);
+	printf("%s\n", temp2->father->type);
+	printnode(temp1);
+	return 0;
+}
