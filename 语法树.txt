@@ -48,9 +48,22 @@ Node getfather(Node *temp,int level){
 */
 void printnode(Node *temp){
 	for (int i = 0; i < temp->level; i++){
-		printf("\t");
+		printf("  ");
 	}
-	printf("%-20s\t%-20s\t%-20s\t\n", temp->type, temp->value, temp->note);
+	printf("%-10s  %-10s  %-10s  \n", temp->type, temp->value, temp->note);
+}
+/*
+´òÓ¡Õû¿ÃÊ÷
+*/
+void printtree(Node*root){
+	if (root->son != 0)
+	{
+		printnode(root);
+		for (int i = 0; i < root->son;i++)
+			printtree(root->sons[i]);
+	}
+	else
+		printnode(root);
 }
 /*
 ²âÊÔ³ÌÐò
@@ -63,7 +76,8 @@ int main(){
 	Node *temp2;
 	temp2 = &init("test2", "testvalue2", "testnote2");
 	connet(temp1, temp2);
-	printf("%s\n", temp2->father->type);
-	printnode(temp1);
+	//printf("%s\n", temp2->father->type);
+	//printnode(temp1);
+	printtree(temp1);
 	return 0;
 }
